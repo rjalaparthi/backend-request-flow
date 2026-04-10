@@ -173,10 +173,11 @@ export default function App() {
       {/* LEFT PANEL */}
       <div className="left">
         <h2>
-          {current.direction === "down"
-            ? "⬇️ Request Flow"
-            : "⬆️ Response Flow"}
-        </h2>
+  Step {step + 1} —{" "}
+  {current.direction === "down"
+    ? "⬇️ Request Flow"
+    : "⬆️ Response Flow"}
+</h2>
 
         <h3>{current.title}</h3>
         <p>{current.detail}</p>
