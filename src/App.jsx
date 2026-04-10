@@ -151,7 +151,21 @@ export default function App() {
   }, [playing]);
 
   const current = steps[step];
-  const activeSet = useMemo(() => new Set(current.active), [current]);
+  const activeSet = useMemo(() => {
+  const visited = new Set();
+
+  if (current.direction === "down") {
+    for (let i = 0; i <= step; i++) {
+      steps[i].active.forEach((a) => visited.add(a));
+    }
+  } else {
+    for (let i = step; i < steps.length; i++) {
+      steps[i].active.forEach((a) => visited.add(a));
+    }
+  }
+
+  return visited;
+}, [step, current.direction]);
 
   return (
     <div className="layout">
