@@ -13,33 +13,127 @@ import {
   Boxes,
   ShieldCheck,
   Cable,
-  ArrowRightLeft,
 } from "lucide-react";
 import "./styles.css";
 
+/* 🔥 FULL REQUEST + RESPONSE FLOW */
 const steps = [
-  { title: "Browser sends request", detail: "User sends request", active: ["client"] },
-  { title: "DNS resolves domain", detail: "Domain → IP", active: ["dns"] },
-  { title: "Load balancer", detail: "Distributes traffic", active: ["lb"] },
-  { title: "Gateway", detail: "Routes request", active: ["gateway"] },
-  { title: "Backend", detail: "Spring Boot receives request", active: ["backend"] },
-  { title: "Controller", detail: "Maps endpoint", active: ["controller"] },
-  { title: "Service", detail: "Business logic", active: ["service"] },
-  { title: "Cache", detail: "Check Redis", active: ["cache"] },
-  { title: "Database", detail: "Query DB", active: ["db"] },
-  { title: "API calls", detail: "Call services", active: ["api"] },
-  { title: "Kafka", detail: "Publish event", active: ["kafka"] },
-  { title: "Response", detail: "Return response", active: ["backend"] },
+  {
+    title: "Browser sends request",
+    detail:
+      "A user opens a website or an app sends an API request. This is the starting point of every system.",
+    active: ["client"],
+    direction: "down",
+  },
+  {
+    title: "DNS resolves domain",
+    detail:
+      "DNS converts a domain like google.com into an IP address so the request knows where to go.",
+    active: ["dns"],
+    direction: "down",
+  },
+  {
+    title: "Load balancer receives traffic",
+    detail:
+      "The load balancer distributes incoming traffic across multiple backend servers to prevent overload.",
+    active: ["lb"],
+    direction: "down",
+  },
+  {
+    title: "API Gateway / Nginx",
+    detail:
+      "This layer handles SSL termination, authentication, routing rules, and forwards the request.",
+    active: ["gateway"],
+    direction: "down",
+  },
+  {
+    title: "Spring Boot backend receives request",
+    detail:
+      "Your backend application receives the request. This is where Java backend engineers start working.",
+    active: ["backend"],
+    direction: "down",
+  },
+  {
+    title: "Controller maps endpoint",
+    detail:
+      "Controller identifies the API endpoint and passes the request to the service layer.",
+    active: ["controller"],
+    direction: "down",
+  },
+  {
+    title: "Service layer executes logic",
+    detail:
+      "Business logic runs here — validation, transformation, and orchestration.",
+    active: ["service"],
+    direction: "down",
+  },
+  {
+    title: "Cache is checked",
+    detail:
+      "System checks Redis or cache first to avoid expensive database queries.",
+    active: ["cache"],
+    direction: "down",
+  },
+  {
+    title: "Database query executes",
+    detail:
+      "If cache misses, backend queries the database using SQL and fetches data.",
+    active: ["db"],
+    direction: "down",
+  },
+
+  /* 🔥 RESPONSE FLOW */
+  {
+    title: "Database returns data",
+    detail:
+      "Database sends the requested data back to the backend application.",
+    active: ["db"],
+    direction: "up",
+  },
+  {
+    title: "Service builds response",
+    detail:
+      "Service layer processes data and prepares response object.",
+    active: ["service"],
+    direction: "up",
+  },
+  {
+    title: "Controller sends response",
+    detail:
+      "Controller converts response into JSON and sends it back.",
+    active: ["controller"],
+    direction: "up",
+  },
+  {
+    title: "Gateway forwards response",
+    detail:
+      "Gateway passes response back through security and routing layers.",
+    active: ["gateway"],
+    direction: "up",
+  },
+  {
+    title: "Load balancer returns response",
+    detail:
+      "Load balancer ensures response reaches the correct client.",
+    active: ["lb"],
+    direction: "up",
+  },
+  {
+    title: "Client receives response",
+    detail:
+      "Browser or app receives data and renders UI.",
+    active: ["client"],
+    direction: "up",
+  },
 ];
 
-function NodeCard({ icon: Icon, title, subtitle, active }) {
+function Node({ label, active, direction }) {
   return (
-    <motion.div className={`node-card ${active ? "active" : ""}`}>
-      <Icon size={20} />
-      <div>
-        <div>{title}</div>
-        <small>{subtitle}</small>
-      </div>
+    <motion.div
+      className={`node ${active ? direction : ""}`}
+      animate={active ? { scale: 1.05 } : { scale: 1 }}
+    >
+      {label}
     </motion.div>
   );
 }
@@ -52,7 +146,7 @@ export default function App() {
     if (!playing) return;
     const t = setInterval(() => {
       setStep((s) => (s + 1) % steps.length);
-    }, 1500);
+    }, 1800);
     return () => clearInterval(t);
   }, [playing]);
 
@@ -60,14 +154,20 @@ export default function App() {
   const activeSet = useMemo(() => new Set(current.active), [current]);
 
   return (
-    <div className="main-layout">
+    <div className="layout">
 
-      {/* LEFT SIDE */}
-      <div className="left-panel">
-        <h2>Backend Flow</h2>
+      {/* LEFT PANEL */}
+      <div className="left">
+        <h2>
+          {current.direction === "down"
+            ? "⬇️ Request Flow"
+            : "⬆️ Response Flow"}
+        </h2>
+
+        <h3>{current.title}</h3>
         <p>{current.detail}</p>
 
-        <div className="btn-column">
+        <div className="buttons">
           <button onClick={() => setStep((s) => (s - 1 + steps.length) % steps.length)}>
             <ChevronLeft /> Prev
           </button>
@@ -92,21 +192,17 @@ export default function App() {
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
-      <div className="right-panel">
-
-        <NodeCard icon={Globe} title="Client" subtitle="Request" active={activeSet.has("client")} />
-        <NodeCard icon={Globe} title="DNS" subtitle="Resolve" active={activeSet.has("dns")} />
-        <NodeCard icon={Network} title="Load Balancer" subtitle="Route" active={activeSet.has("lb")} />
-        <NodeCard icon={ShieldCheck} title="Gateway" subtitle="Forward" active={activeSet.has("gateway")} />
-        <NodeCard icon={Server} title="Backend" subtitle="Spring Boot" active={activeSet.has("backend")} />
-        <NodeCard icon={Boxes} title="Controller" subtitle="API" active={activeSet.has("controller")} />
-        <NodeCard icon={ShieldCheck} title="Service" subtitle="Logic" active={activeSet.has("service")} />
-        <NodeCard icon={Database} title="Cache" subtitle="Redis" active={activeSet.has("cache")} />
-        <NodeCard icon={Database} title="Database" subtitle="Postgres" active={activeSet.has("db")} />
-        <NodeCard icon={Cable} title="API Calls" subtitle="External" active={activeSet.has("api")} />
-        <NodeCard icon={Network} title="Kafka" subtitle="Events" active={activeSet.has("kafka")} />
-
+      {/* RIGHT PANEL */}
+      <div className="right">
+        <Node label="Client" active={activeSet.has("client")} direction={current.direction} />
+        <Node label="DNS" active={activeSet.has("dns")} direction={current.direction} />
+        <Node label="Load Balancer" active={activeSet.has("lb")} direction={current.direction} />
+        <Node label="Gateway" active={activeSet.has("gateway")} direction={current.direction} />
+        <Node label="Backend" active={activeSet.has("backend")} direction={current.direction} />
+        <Node label="Controller" active={activeSet.has("controller")} direction={current.direction} />
+        <Node label="Service" active={activeSet.has("service")} direction={current.direction} />
+        <Node label="Cache" active={activeSet.has("cache")} direction={current.direction} />
+        <Node label="Database" active={activeSet.has("db")} direction={current.direction} />
       </div>
     </div>
   );
