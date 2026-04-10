@@ -20,14 +20,21 @@
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
+/* 🔵 Request flow */
 .node.down {
-  background: lightblue;
+  background: #dbeafe;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.7);
+  transform: translateX(10px);
 }
 
+/* 🟢 Response flow */
 .node.up {
-  background: lightgreen;
+  background: #dcfce7;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
+  transform: translateX(-10px);
 }
 
 .buttons {
