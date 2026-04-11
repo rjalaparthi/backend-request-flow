@@ -11,30 +11,86 @@ import "./styles.css";
 
 /* 🔥 BACKEND + RAG FLOW */
 const steps = [
-  { title: "Client Request", detail: "User sends request", active: ["client"], direction: "down" },
-  { title: "DNS Resolve", detail: "Domain → IP", active: ["dns"], direction: "down" },
-  { title: "Load Balancer", detail: "Routes traffic", active: ["lb"], direction: "down" },
-  { title: "Gateway", detail: "Auth + routing", active: ["gateway"], direction: "down" },
-  { title: "Backend", detail: "Receives request", active: ["backend"], direction: "down" },
-  { title: "Controller", detail: "Maps endpoint", active: ["controller"], direction: "down" },
-  { title: "Service Layer", detail: "Business logic starts", active: ["service"], direction: "down" },
+  {
+    title: "Client Request",
+    detail:
+      "User sends a request from browser or app.\nThis starts the entire backend and AI processing flow.",
+    active: ["client"],
+    direction: "down",
+  },
+  {
+    title: "DNS Resolve",
+    detail:
+      "Domain name is converted into IP address.\nThis allows the request to reach the correct server.",
+    active: ["dns"],
+    direction: "down",
+  },
+  {
+    title: "Load Balancer",
+    detail:
+      "Traffic is distributed across multiple backend servers.\nPrevents overload and improves scalability.",
+    active: ["lb"],
+    direction: "down",
+  },
+  {
+    title: "Gateway",
+    detail:
+      "Handles authentication, routing, and security checks.\nThen forwards request to backend service.",
+    active: ["gateway"],
+    direction: "down",
+  },
+  {
+    title: "Service Layer",
+    detail:
+      "Core decision point of backend.\nDecides whether to query database or use RAG pipeline.",
+    active: ["service"],
+    direction: "down",
+  },
 
-  // 🔥 RAG START
-  { title: "Embedding", detail: "Convert query to vector", active: ["embedding"], direction: "down" },
-  { title: "Vector DB Search", detail: "Find similar data (Top-K)", active: ["vectordb"], direction: "down" },
+  // 🔥 RAG
+  {
+    title: "Embedding",
+    detail:
+      "User query is converted into vector representation.\nThis allows semantic similarity search instead of exact matching.",
+    active: ["embedding"],
+    direction: "down",
+  },
+  {
+    title: "Vector DB",
+    detail:
+      "Searches for similar data using vector distance.\nReturns top relevant chunks instead of exact matches.",
+    active: ["vectordb"],
+    direction: "down",
+  },
+  {
+    title: "Check Results",
+    detail:
+      "System evaluates relevance of retrieved data.\nLow similarity means risk of hallucination.",
+    active: ["check"],
+    direction: "down",
+  },
+  {
+    title: "Retry",
+    detail:
+      "If results are weak, system retries retrieval.\nIt may increase Top-K or refine query.",
+    active: ["retry"],
+    direction: "down",
+  },
+  {
+    title: "LLM Processing",
+    detail:
+      "LLM receives question + retrieved context.\nGenerates response grounded in real data.",
+    active: ["llm"],
+    direction: "down",
+  },
 
-  { title: "Check Results", detail: "Are results relevant?", active: ["check"], direction: "down" },
-
-  { title: "Low Confidence ⚠️", detail: "Weak match → hallucination risk", active: ["warning"], direction: "down" },
-  { title: "Retry Retrieval 🔁", detail: "Increase Top-K or refine query", active: ["retry"], direction: "down" },
-
-  { title: "LLM Processing", detail: "Generate answer using context", active: ["llm"], direction: "down" },
-
-  // 🔥 RESPONSE
-  { title: "Grounded Response ✅", detail: "Answer backed by data", active: ["success"], direction: "up" },
-  { title: "Fallback 🚫", detail: "No data → safe response", active: ["fallback"], direction: "up" },
-
-  { title: "Client Response", detail: "User receives answer", active: ["client"], direction: "up" },
+  {
+    title: "Response",
+    detail:
+      "Final answer is returned to backend.\nThen sent back to user through gateway and load balancer.",
+    active: ["client"],
+    direction: "up",
+  },
 ];
 function Node({ label, active, direction, type }) {
   return (
