@@ -11,55 +11,30 @@ import "./styles.css";
 
 /* 🔥 BACKEND + RAG FLOW */
 const steps = [
-  { title: "Client Request", detail: "User asks question", active: ["client"], direction: "down" },
-  { title: "Service Layer", detail: "Backend processes request", active: ["service"], direction: "down" },
+  { title: "Client Request", detail: "User sends request", active: ["client"], direction: "down" },
+  { title: "DNS Resolve", detail: "Domain → IP", active: ["dns"], direction: "down" },
+  { title: "Load Balancer", detail: "Routes traffic", active: ["lb"], direction: "down" },
+  { title: "Gateway", detail: "Auth + routing", active: ["gateway"], direction: "down" },
+  { title: "Backend", detail: "Receives request", active: ["backend"], direction: "down" },
+  { title: "Controller", detail: "Maps endpoint", active: ["controller"], direction: "down" },
+  { title: "Service Layer", detail: "Business logic starts", active: ["service"], direction: "down" },
 
-  // 🔥 RAG
+  // 🔥 RAG START
   { title: "Embedding", detail: "Convert query to vector", active: ["embedding"], direction: "down" },
-  { title: "Vector DB Search", detail: "Find similar data (Top 3)", active: ["vectordb"], direction: "down" },
+  { title: "Vector DB Search", detail: "Find similar data (Top-K)", active: ["vectordb"], direction: "down" },
 
   { title: "Check Results", detail: "Are results relevant?", active: ["check"], direction: "down" },
 
-  // 🔥 CONDITION
-  {
-    title: "Low Confidence ⚠️",
-    detail: "Weak match → risk of hallucination",
-    active: ["warning"],
-    direction: "down",
-  },
-  {
-    title: "Retry Retrieval 🔁",
-    detail: "Increase Top-K or refine query",
-    active: ["retry"],
-    direction: "down",
-  },
+  { title: "Low Confidence ⚠️", detail: "Weak match → hallucination risk", active: ["warning"], direction: "down" },
+  { title: "Retry Retrieval 🔁", detail: "Increase Top-K or refine query", active: ["retry"], direction: "down" },
 
-  {
-    title: "LLM Processing",
-    detail: "Generate answer using context",
-    active: ["llm"],
-    direction: "down",
-  },
+  { title: "LLM Processing", detail: "Generate answer using context", active: ["llm"], direction: "down" },
 
   // 🔥 RESPONSE
-  {
-    title: "Grounded Response ✅",
-    detail: "Answer backed by retrieved data",
-    active: ["success"],
-    direction: "up",
-  },
-  {
-    title: "Fallback 🚫",
-    detail: "No data → return safe response",
-    active: ["fallback"],
-    direction: "up",
-  },
-  {
-    title: "Client Response",
-    detail: "User receives final answer",
-    active: ["client"],
-    direction: "up",
-  },
+  { title: "Grounded Response ✅", detail: "Answer backed by data", active: ["success"], direction: "up" },
+  { title: "Fallback 🚫", detail: "No data → safe response", active: ["fallback"], direction: "up" },
+
+  { title: "Client Response", detail: "User receives answer", active: ["client"], direction: "up" },
 ];
 function Node({ label, active, direction, type }) {
   return (
