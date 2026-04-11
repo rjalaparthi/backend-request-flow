@@ -146,7 +146,7 @@ export default function App() {
 
       {/* RIGHT PANEL */}
       <div className="right">
-       <Node label="Client" active={activeSet.has("client")} direction={current.direction} />
+<Node label="Client" active={activeSet.has("client")} direction={current.direction} />
 <Node label="DNS" active={activeSet.has("dns")} direction={current.direction} />
 <Node label="Load Balancer" active={activeSet.has("lb")} direction={current.direction} />
 <Node label="Gateway" active={activeSet.has("gateway")} direction={current.direction} />
@@ -154,21 +154,16 @@ export default function App() {
 <Node label="Controller" active={activeSet.has("controller")} direction={current.direction} />
 <Node label="Service" active={activeSet.has("service")} direction={current.direction} />
 
-{/* 🔥 RAG PIPELINE */}
 <Node label="Embedding" active={activeSet.has("embedding")} direction={current.direction} />
 <Node label="Vector DB" active={activeSet.has("vectordb")} direction={current.direction} />
 
-{/* 🔍 DECISION */}
-<Node label="Check Results" active={activeSet.has("check")} direction={current.direction} />
+<Node label="Check" active={activeSet.has("check")} direction={current.direction} />
 
-{/* ⚠️ FAILURE PATH */}
 <Node label="⚠️ Low Confidence" active={activeSet.has("warning")} direction={current.direction} />
 <Node label="🔁 Retry" active={activeSet.has("retry")} direction={current.direction} />
 
-{/* 🤖 AI */}
 <Node label="LLM" active={activeSet.has("llm")} direction={current.direction} />
 
-{/* ✅ / 🚫 RESPONSE */}
 <Node label="✅ Success" active={activeSet.has("success")} direction={current.direction} />
 <Node label="🚫 Fallback" active={activeSet.has("fallback")} direction={current.direction} />
       </div>
