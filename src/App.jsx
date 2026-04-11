@@ -6,125 +6,31 @@ import {
   Play,
   Pause,
   RotateCcw,
-  Globe,
-  Server,
-  Database,
-  Network,
-  Boxes,
-  ShieldCheck,
-  Cable,
 } from "lucide-react";
 import "./styles.css";
 
-/* 🔥 FULL REQUEST + RESPONSE FLOW */
+/* 🔥 BACKEND + RAG FLOW */
 const steps = [
-  {
-    title: "Browser sends request",
-    detail:
-      "A user opens a website or an app sends an API request. This is the starting point of every system.",
-    active: ["client"],
-    direction: "down",
-  },
-  {
-    title: "DNS resolves domain",
-    detail:
-      "DNS converts a domain like google.com into an IP address so the request knows where to go.",
-    active: ["dns"],
-    direction: "down",
-  },
-  {
-    title: "Load balancer receives traffic",
-    detail:
-      "The load balancer distributes incoming traffic across multiple backend servers to prevent overload.",
-    active: ["lb"],
-    direction: "down",
-  },
-  {
-    title: "API Gateway / Nginx",
-    detail:
-      "This layer handles SSL termination, authentication, routing rules, and forwards the request.",
-    active: ["gateway"],
-    direction: "down",
-  },
-  {
-    title: "Spring Boot backend receives request",
-    detail:
-      "Your backend application receives the request. This is where Java backend engineers start working.",
-    active: ["backend"],
-    direction: "down",
-  },
-  {
-    title: "Controller maps endpoint",
-    detail:
-      "Controller identifies the API endpoint and passes the request to the service layer.",
-    active: ["controller"],
-    direction: "down",
-  },
-  {
-    title: "Service layer executes logic",
-    detail:
-      "Business logic runs here — validation, transformation, and orchestration.",
-    active: ["service"],
-    direction: "down",
-  },
-  {
-    title: "Cache is checked",
-    detail:
-      "System checks Redis or cache first to avoid expensive database queries.",
-    active: ["cache"],
-    direction: "down",
-  },
-  {
-    title: "Database query executes",
-    detail:
-      "If cache misses, backend queries the database using SQL and fetches data.",
-    active: ["db"],
-    direction: "down",
-  },
+  { title: "Client Request", detail: "User sends request", active: ["client"], direction: "down" },
+  { title: "DNS Resolve", detail: "Domain to IP", active: ["dns"], direction: "down" },
+  { title: "Load Balancer", detail: "Routes traffic", active: ["lb"], direction: "down" },
+  { title: "Gateway", detail: "Auth + routing", active: ["gateway"], direction: "down" },
+  { title: "Backend", detail: "Receives request", active: ["backend"], direction: "down" },
+  { title: "Controller", detail: "Maps endpoint", active: ["controller"], direction: "down" },
+  { title: "Service Layer", detail: "Business logic starts", active: ["service"], direction: "down" },
 
-  /* 🔥 RESPONSE FLOW */
-  {
-    title: "Database returns data",
-    detail:
-      "Database sends the requested data back to the backend application.",
-    active: ["db"],
-    direction: "up",
-  },
-  {
-    title: "Service builds response",
-    detail:
-      "Service layer processes data and prepares response object.",
-    active: ["service"],
-    direction: "up",
-  },
-  {
-    title: "Controller sends response",
-    detail:
-      "Controller converts response into JSON and sends it back.",
-    active: ["controller"],
-    direction: "up",
-  },
-  {
-    title: "Gateway forwards response",
-    detail:
-      "Gateway passes response back through security and routing layers.",
-    active: ["gateway"],
-    direction: "up",
-  },
-  {
-    title: "Load balancer returns response",
-    detail:
-      "Load balancer ensures response reaches the correct client.",
-    active: ["lb"],
-    direction: "up",
-  },
-  {
-    title: "Client receives response",
-    detail:
-      "Browser or app receives data and renders UI.",
-    active: ["client"],
-    direction: "up",
-  },
+  /* 🔥 RAG STARTS */
+  { title: "Embedding", detail: "Convert query to vector", active: ["embedding"], direction: "down" },
+  { title: "Vector DB Search", detail: "Find similar data", active: ["vectordb"], direction: "down" },
+  { title: "LLM Processing", detail: "Generate answer", active: ["llm"], direction: "down" },
+
+  /* 🔥 RESPONSE */
+  { title: "LLM Response", detail: "AI generates output", active: ["llm"], direction: "up" },
+  { title: "Service builds response", active: ["service"], direction: "up" },
+  { title: "Controller returns", active: ["controller"], direction: "up" },
+  { title: "Gateway returns", active: ["gateway"], direction: "up" },
+  { title: "Load Balancer returns", active: ["lb"], direction: "up" },
+  { title: "Client receives response", active: ["client"], direction: "up" },
 ];
 
 function Node({ label, active, direction }) {
@@ -151,33 +57,36 @@ export default function App() {
   }, [playing]);
 
   const current = steps[step];
+
   const activeSet = useMemo(() => {
-  const visited = new Set();
+    const visited = new Set();
 
-  if (current.direction === "down") {
-    for (let i = 0; i <= step; i++) {
-      steps[i].active.forEach((a) => visited.add(a));
+    if (current.direction === "down") {
+      for (let i = 0; i <= step; i++) {
+        steps[i].active.forEach((a) => visited.add(a));
+      }
+    } else {
+      for (let i = step; i < steps.length; i++) {
+        steps[i].active.forEach((a) => visited.add(a));
+      }
     }
-  } else {
-    for (let i = step; i < steps.length; i++) {
-      steps[i].active.forEach((a) => visited.add(a));
-    }
-  }
 
-  return visited;
-}, [step, current.direction]);
+    return visited;
+  }, [step, current.direction]);
 
   return (
     <div className="layout">
 
       {/* LEFT PANEL */}
       <div className="left">
+        <h1>AI Backend Request Flow</h1>
+
         <h2>
-  Step {step + 1} —{" "}
-  {current.direction === "down"
-    ? "⬇️ Request Flow"
-    : "⬆️ Response Flow"}
-</h2>
+          Step {step + 1} —{" "}
+          {current.direction === "down"
+            ? "⬇️ Request Flow"
+            : "⬆️ Response Flow"}
+        </h2>
 
         <h3>{current.title}</h3>
         <p>{current.detail}</p>
@@ -216,8 +125,11 @@ export default function App() {
         <Node label="Backend" active={activeSet.has("backend")} direction={current.direction} />
         <Node label="Controller" active={activeSet.has("controller")} direction={current.direction} />
         <Node label="Service" active={activeSet.has("service")} direction={current.direction} />
-        <Node label="Cache" active={activeSet.has("cache")} direction={current.direction} />
-        <Node label="Database" active={activeSet.has("db")} direction={current.direction} />
+
+        {/* 🔥 RAG */}
+        <Node label="Embedding" active={activeSet.has("embedding")} direction={current.direction} />
+        <Node label="Vector DB" active={activeSet.has("vectordb")} direction={current.direction} />
+        <Node label="LLM" active={activeSet.has("llm")} direction={current.direction} />
       </div>
     </div>
   );
