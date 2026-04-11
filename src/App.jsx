@@ -11,26 +11,55 @@ import "./styles.css";
 
 /* 🔥 BACKEND + RAG FLOW */
 const steps = [
-  { title: "Client Request", detail: "User sends request from browser or app", active: ["client"], direction: "down" },
-  { title: "DNS Resolve", detail: "Domain is converted into IP address", active: ["dns"], direction: "down" },
-  { title: "Load Balancer", detail: "Distributes traffic across backend servers", active: ["lb"], direction: "down" },
-  { title: "Gateway", detail: "Handles auth, routing, and forwards request", active: ["gateway"], direction: "down" },
-  { title: "Backend", detail: "Application receives and processes request", active: ["backend"], direction: "down" },
-  { title: "Controller", detail: "Maps API endpoint and forwards to service", active: ["controller"], direction: "down" },
-  { title: "Service Layer", detail: "Business logic starts here", active: ["service"], direction: "down" },
+  { title: "Client Request", detail: "User asks question", active: ["client"], direction: "down" },
+  { title: "Service Layer", detail: "Backend processes request", active: ["service"], direction: "down" },
 
   // 🔥 RAG
-  { title: "Embedding", detail: "Convert user query into vector representation", active: ["embedding"], direction: "down" },
-  { title: "Vector DB", detail: "Find similar data using semantic search", active: ["vectordb"], direction: "down" },
-  { title: "LLM Processing", detail: "Generate answer using context + question", active: ["llm"], direction: "down" },
+  { title: "Embedding", detail: "Convert query to vector", active: ["embedding"], direction: "down" },
+  { title: "Vector DB Search", detail: "Find similar data (Top 3)", active: ["vectordb"], direction: "down" },
+
+  { title: "Check Results", detail: "Are results relevant?", active: ["check"], direction: "down" },
+
+  // 🔥 CONDITION
+  {
+    title: "Low Confidence ⚠️",
+    detail: "Weak match → risk of hallucination",
+    active: ["warning"],
+    direction: "down",
+  },
+  {
+    title: "Retry Retrieval 🔁",
+    detail: "Increase Top-K or refine query",
+    active: ["retry"],
+    direction: "down",
+  },
+
+  {
+    title: "LLM Processing",
+    detail: "Generate answer using context",
+    active: ["llm"],
+    direction: "down",
+  },
 
   // 🔥 RESPONSE
-  { title: "LLM Response", detail: "AI generates final response", active: ["llm"], direction: "up" },
-  { title: "Service Response", detail: "Formats and prepares response", active: ["service"], direction: "up" },
-  { title: "Controller Return", detail: "Converts response into JSON", active: ["controller"], direction: "up" },
-  { title: "Gateway Return", detail: "Routes response back securely", active: ["gateway"], direction: "up" },
-  { title: "Load Balancer Return", detail: "Ensures response reaches client", active: ["lb"], direction: "up" },
-  { title: "Client Response", detail: "UI receives and renders data", active: ["client"], direction: "up" },
+  {
+    title: "Grounded Response ✅",
+    detail: "Answer backed by retrieved data",
+    active: ["success"],
+    direction: "up",
+  },
+  {
+    title: "Fallback 🚫",
+    detail: "No data → return safe response",
+    active: ["fallback"],
+    direction: "up",
+  },
+  {
+    title: "Client Response",
+    detail: "User receives final answer",
+    active: ["client"],
+    direction: "up",
+  },
 ];
 function Node({ label, active, direction }) {
   return (
