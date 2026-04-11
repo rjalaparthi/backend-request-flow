@@ -21,7 +21,7 @@ const steps = [
 
   // 🔥 DB PATH
   { title: "Check Database", detail: "Try to find exact data", active: ["db"], direction: "down" },
-  { title: "DB Found ✅", detail: "Data found directly", active: ["db_success"], direction: "up" },
+  { title: "DB Found ✅", detail: "Data found directly", active: ["db_success"], direction: "down" },
 
   // 🔥 RAG PATH
   { title: "Not Found → RAG", detail: "Fallback to AI search", active: ["rag_start"], direction: "down" },
@@ -38,11 +38,41 @@ const steps = [
   { title: "Fallback 🚫", detail: "No data available", active: ["fallback"], direction: "up" },
 
   // 🔥 RESPONSE BACK
-  { title: "Service Response", active: ["service"], direction: "up" },
-  { title: "Controller", active: ["controller"], direction: "up" },
-  { title: "Gateway", active: ["gateway"], direction: "up" },
-  { title: "Load Balancer", active: ["lb"], direction: "up" },
-  { title: "Client", active: ["client"], direction: "up" },
+  { 
+  title: "Service Response", 
+  detail: 
+    "Service prepares the final answer.\nMakes sure the data is correct before sending it back.", 
+  active: ["service"], 
+  direction: "up" 
+},
+{ 
+  title: "Controller", 
+  detail: 
+    "Controller converts the response into JSON format.\nThis is what frontend understands.", 
+  active: ["controller"], 
+  direction: "up" 
+},
+{ 
+  title: "Gateway", 
+  detail: 
+    "Gateway sends the response securely.\nIt ensures rules and checks are followed.", 
+  active: ["gateway"], 
+  direction: "up" 
+},
+{ 
+  title: "Load Balancer", 
+  detail: 
+    "Load balancer routes response back to the right user.\nMakes sure it reaches the correct client.", 
+  active: ["lb"], 
+  direction: "up" 
+},
+{ 
+  title: "Client", 
+  detail: 
+    "User receives the answer.\nThe result is displayed on the screen.", 
+  active: ["client"], 
+  direction: "up" 
+},
 ];
 function Node({ label, active, direction, type }) {
   return (
@@ -154,7 +184,12 @@ export default function App() {
 />        
 
 {/* 🔥 RAG PATH */}
-<Node label="RAG Start" active={activeSet.has("rag_start")} direction={current.direction} />
+<Node
+  label="RAG Start"
+  active={activeSet.has("rag_start")}
+  type="rag_start"
+  direction={current.direction}
+/>        
 <Node label="Embedding" active={activeSet.has("embedding")} direction={current.direction} />
 <Node label="Vector DB" active={activeSet.has("vectordb")} direction={current.direction} />
 <Node label="Check" active={activeSet.has("check")} direction={current.direction} />
