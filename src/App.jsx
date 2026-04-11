@@ -148,7 +148,9 @@ export default function App() {
         </h2>
 
         <h3>{current.title}</h3>
-        <p>{current.detail}</p>
+       <p style={{ whiteSpace: "pre-line" }}>
+        {current.detail}
+      </p>
 
         <div className="buttons">
           <button onClick={() => setStep((s) => (s - 1 + steps.length) % steps.length)}>
