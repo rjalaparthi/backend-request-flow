@@ -69,3 +69,12 @@
   border: 1px solid #6b7280;
   box-shadow: 0 0 8px rgba(107, 114, 128, 0.5);
 }
+.node.db_success {
+  background: #bbf7d0;
+  border: 1px solid #22c55e;
+}
+
+.node.rag_start {
+  background: #e0f2fe;
+  border: 1px solid #0ea5e9;
+}
