@@ -61,7 +61,7 @@ const steps = [
     direction: "up",
   },
 ];
-function Node({ label, active, direction }) {
+function Node({ label, active, direction, type }) {
   return (
     <motion.div
       className={`node ${active ? direction : ""} ${active && type ? type : ""}`}
