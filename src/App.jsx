@@ -140,8 +140,18 @@ export default function App() {
 <Node label="Service" active={activeSet.has("service")} direction={current.direction} />
 
 {/* 🔥 DB PATH */}
-<Node label="Database" active={activeSet.has("db")} direction={current.direction} />
-<Node label="DB Success ✅" active={activeSet.has("db_success")} direction={current.direction} />
+<Node
+  label="Database"
+  active={activeSet.has("db")}
+  direction={current.direction}
+/>
+
+<Node
+  label="DB Success ✅"
+  active={activeSet.has("db_success")}
+  type="db_success"
+  direction={current.direction}
+/>        
 
 {/* 🔥 RAG PATH */}
 <Node label="RAG Start" active={activeSet.has("rag_start")} direction={current.direction} />
