@@ -64,7 +64,7 @@ const steps = [
 function Node({ label, active, direction }) {
   return (
     <motion.div
-      className={`node ${active ? direction : ""}`}
+      className={`node ${active ? direction : ""} ${active && type ? type : ""}`}
       animate={active ? { scale: 1.05 } : { scale: 1 }}
     >
       {label}
