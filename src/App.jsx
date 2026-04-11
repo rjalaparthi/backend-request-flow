@@ -14,35 +14,49 @@ const steps = [
   {
     title: "Client Request",
     detail:
-      "User sends a request from browser or app.\nThis starts the entire backend and AI processing flow.",
+      "User asks a question.\nLike asking: 'What happened to my claim?'",
     active: ["client"],
     direction: "down",
   },
   {
-    title: "DNS Resolve",
+    title: "DNS",
     detail:
-      "Domain name is converted into IP address.\nThis allows the request to reach the correct server.",
+      "Internet finds where the website lives.\nLike finding an address before going there.",
     active: ["dns"],
     direction: "down",
   },
   {
     title: "Load Balancer",
     detail:
-      "Traffic is distributed across multiple backend servers.\nPrevents overload and improves scalability.",
+      "Chooses which server should handle the request.\nLike picking the shortest queue in a store.",
     active: ["lb"],
     direction: "down",
   },
   {
     title: "Gateway",
     detail:
-      "Handles authentication, routing, and security checks.\nThen forwards request to backend service.",
+      "Checks if the request is allowed.\nLike a security guard at the entrance.",
     active: ["gateway"],
     direction: "down",
   },
   {
-    title: "Service Layer",
+    title: "Backend",
     detail:
-      "Core decision point of backend.\nDecides whether to query database or use RAG pipeline.",
+      "Main system receives the request.\nThis is where actual work starts.",
+    active: ["backend"],
+    direction: "down",
+  },
+  {
+    title: "Controller",
+    detail:
+      "Decides which function to run.\nLike choosing which team should handle the task.",
+    active: ["controller"],
+    direction: "down",
+  },
+  {
+    title: "Service",
+    detail:
+      "This is the brain of the system.\nIt decides what to do next.",
     active: ["service"],
     direction: "down",
   },
@@ -51,35 +65,35 @@ const steps = [
   {
     title: "Embedding",
     detail:
-      "User query is converted into vector representation.\nThis allows semantic similarity search instead of exact matching.",
+      "Turns the question into numbers.\nSo computer can understand meaning, not just words.",
     active: ["embedding"],
     direction: "down",
   },
   {
     title: "Vector DB",
     detail:
-      "Searches for similar data using vector distance.\nReturns top relevant chunks instead of exact matches.",
+      "Finds similar information.\nLike searching for similar stories, not exact words.",
     active: ["vectordb"],
     direction: "down",
   },
   {
     title: "Check Results",
     detail:
-      "System evaluates relevance of retrieved data.\nLow similarity means risk of hallucination.",
+      "System checks if the data makes sense.\nIf not, it should not guess.",
     active: ["check"],
     direction: "down",
   },
   {
     title: "Retry",
     detail:
-      "If results are weak, system retries retrieval.\nIt may increase Top-K or refine query.",
+      "If data is weak, system tries again.\nLike asking the question in a better way.",
     active: ["retry"],
     direction: "down",
   },
   {
-    title: "LLM Processing",
+    title: "LLM",
     detail:
-      "LLM receives question + retrieved context.\nGenerates response grounded in real data.",
+      "AI reads the data and writes an answer.\nLike a smart assistant answering using notes.",
     active: ["llm"],
     direction: "down",
   },
@@ -87,7 +101,7 @@ const steps = [
   {
     title: "Response",
     detail:
-      "Final answer is returned to backend.\nThen sent back to user through gateway and load balancer.",
+      "Answer goes back to user.\nUser sees the result on screen.",
     active: ["client"],
     direction: "up",
   },
