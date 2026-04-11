@@ -11,100 +11,38 @@ import "./styles.css";
 
 /* 🔥 BACKEND + RAG FLOW */
 const steps = [
-  {
-    title: "Client Request",
-    detail:
-      "User asks a question.\nLike asking: 'What happened to my claim?'",
-    active: ["client"],
-    direction: "down",
-  },
-  {
-    title: "DNS",
-    detail:
-      "Internet finds where the website lives.\nLike finding an address before going there.",
-    active: ["dns"],
-    direction: "down",
-  },
-  {
-    title: "Load Balancer",
-    detail:
-      "Chooses which server should handle the request.\nLike picking the shortest queue in a store.",
-    active: ["lb"],
-    direction: "down",
-  },
-  {
-    title: "Gateway",
-    detail:
-      "Checks if the request is allowed.\nLike a security guard at the entrance.",
-    active: ["gateway"],
-    direction: "down",
-  },
-  {
-    title: "Backend",
-    detail:
-      "Main system receives the request.\nThis is where actual work starts.",
-    active: ["backend"],
-    direction: "down",
-  },
-  {
-    title: "Controller",
-    detail:
-      "Decides which function to run.\nLike choosing which team should handle the task.",
-    active: ["controller"],
-    direction: "down",
-  },
-  {
-    title: "Service",
-    detail:
-      "This is the brain of the system.\nIt decides what to do next.",
-    active: ["service"],
-    direction: "down",
-  },
+  { title: "Client Request", detail: "User asks a question", active: ["client"], direction: "down" },
+  { title: "DNS", detail: "Find server location", active: ["dns"], direction: "down" },
+  { title: "Load Balancer", detail: "Pick server", active: ["lb"], direction: "down" },
+  { title: "Gateway", detail: "Security + routing", active: ["gateway"], direction: "down" },
+  { title: "Backend", detail: "Receives request", active: ["backend"], direction: "down" },
+  { title: "Controller", detail: "Routes request", active: ["controller"], direction: "down" },
+  { title: "Service", detail: "Decides what to do", active: ["service"], direction: "down" },
 
-  // 🔥 RAG
-  {
-    title: "Embedding",
-    detail:
-      "Turns the question into numbers.\nSo computer can understand meaning, not just words.",
-    active: ["embedding"],
-    direction: "down",
-  },
-  {
-    title: "Vector DB",
-    detail:
-      "Finds similar information.\nLike searching for similar stories, not exact words.",
-    active: ["vectordb"],
-    direction: "down",
-  },
-  {
-    title: "Check Results",
-    detail:
-      "System checks if the data makes sense.\nIf not, it should not guess.",
-    active: ["check"],
-    direction: "down",
-  },
-  {
-    title: "Retry",
-    detail:
-      "If data is weak, system tries again.\nLike asking the question in a better way.",
-    active: ["retry"],
-    direction: "down",
-  },
-  {
-    title: "LLM",
-    detail:
-      "AI reads the data and writes an answer.\nLike a smart assistant answering using notes.",
-    active: ["llm"],
-    direction: "down",
-  },
+  // 🔥 DB PATH
+  { title: "Check Database", detail: "Try to find exact data", active: ["db"], direction: "down" },
+  { title: "DB Found ✅", detail: "Data found directly", active: ["db_success"], direction: "up" },
 
-  {
-    title: "Response",
-    detail:
-      "Answer goes back to user.\nUser sees the result on screen.",
-    active: ["client"],
-    direction: "up",
-  },
+  // 🔥 RAG PATH
+  { title: "Not Found → RAG", detail: "Fallback to AI search", active: ["rag_start"], direction: "down" },
+  { title: "Embedding", detail: "Convert to vector", active: ["embedding"], direction: "down" },
+  { title: "Vector DB", detail: "Find similar data", active: ["vectordb"], direction: "down" },
+  { title: "Check Results", detail: "Are results good?", active: ["check"], direction: "down" },
+
+  { title: "Low Confidence ⚠️", detail: "Data is weak", active: ["warning"], direction: "down" },
+  { title: "Retry 🔁", detail: "Try again better", active: ["retry"], direction: "down" },
+
+  { title: "LLM", detail: "Generate answer", active: ["llm"], direction: "down" },
+
+  { title: "RAG Success ✅", detail: "AI answer created", active: ["success"], direction: "up" },
+  { title: "Fallback 🚫", detail: "No data available", active: ["fallback"], direction: "up" },
+
+  // 🔥 RESPONSE BACK
+  { title: "Service Response", active: ["service"], direction: "up" },
+  { title: "Controller", active: ["controller"], direction: "up" },
+  { title: "Gateway", active: ["gateway"], direction: "up" },
+  { title: "Load Balancer", active: ["lb"], direction: "up" },
+  { title: "Client", active: ["client"], direction: "up" },
 ];
 function Node({ label, active, direction, type }) {
   return (
@@ -201,17 +139,19 @@ export default function App() {
 <Node label="Controller" active={activeSet.has("controller")} direction={current.direction} />
 <Node label="Service" active={activeSet.has("service")} direction={current.direction} />
 
+{/* 🔥 DB PATH */}
+<Node label="Database" active={activeSet.has("db")} direction={current.direction} />
+<Node label="DB Success ✅" active={activeSet.has("db_success")} direction={current.direction} />
+
+{/* 🔥 RAG PATH */}
+<Node label="RAG Start" active={activeSet.has("rag_start")} direction={current.direction} />
 <Node label="Embedding" active={activeSet.has("embedding")} direction={current.direction} />
 <Node label="Vector DB" active={activeSet.has("vectordb")} direction={current.direction} />
-
 <Node label="Check" active={activeSet.has("check")} direction={current.direction} />
-
 <Node label="⚠️ Low Confidence" active={activeSet.has("warning")} direction={current.direction} />
 <Node label="🔁 Retry" active={activeSet.has("retry")} direction={current.direction} />
-
 <Node label="LLM" active={activeSet.has("llm")} direction={current.direction} />
-
-<Node label="✅ Success" active={activeSet.has("success")} direction={current.direction} />
+<Node label="RAG Success ✅" active={activeSet.has("success")} direction={current.direction} />
 <Node label="🚫 Fallback" active={activeSet.has("fallback")} direction={current.direction} />
       </div>
     </div>
